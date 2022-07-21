@@ -50,3 +50,53 @@ public String helloMvc(@RequestParam("name") String name, Model model) {
   model.Addattribute("name", name);
   return "hello-template"
 }
+```
+위 코드는 localhost:8080/hello-mvc url로 들어갈 시 실행되는 메소드인데 @RequestParam으로 사용자로부터 값을 입력받고, hello-template.html파일을 실행한다.
+> **HOW INPUT?**    
+localhost:8080/hello?name=입력할 값.
+
+``` html
+<html xmlns:th = "http://www.thymeleaf.org">
+<body>
+  <p th:text="'hello ' + ${name}">hello! empty</p>
+</body>
+```
+hello-template.html 코드인데, 사용자로부터 입력받은 값 name을 사용해 입력에 따라 출력이 바뀌는 코드인다.   
+> ex ) localhost:8080/hello-mvc?name=spring을 입력하면 hello spring을 출력한다.
+
+# API
+html파일을 거치지 않고, 바로 데이터를 내리는 것.
+
+``` java
+@GetMapping("hello-string")
+@ResponseBody // Body 응답 부분에 값을 직접 넣어주겠다는 의미.
+public String helloString(@RequestParam("name") String name) {
+  return "hello " + name; // spring 입력시 hello spring출력
+}
+```
+위 코드는 html파일을 거치지 않고 바로 출력하는 방식이다.
+
+``` java
+@GetMapping("hello-api")
+@ResponseBody
+public Hello helloApi(@RequestParam("name") String name) {
+  Hello hello = new Hello();
+  hello.setName(name);
+  return hello;
+}
+
+static class Hello {
+  private String name;
+
+  public String getName() {
+    return name;
+  }
+  public void setName(String name) {
+    this.name = name
+  }
+}
+```
+위 코드는 localhost:8080/hello-api url을 입력하면 실행되는데 객체를 이용한 api방식이다.   
+private으로 name이라는 변수를 생성했기 때문에 외부에서 사용할 수 있게 getter와 setter 메소드를 이용하여 입력과 출력을 할 수 있게 한다.
+> ex ) localhost:8080/hello-api?name=spring!!을 입력하면 { "name" : "hello spring!!" }을 출력한다.   
+**{ }로 묵이는 이유는 객체이기 때문.**
