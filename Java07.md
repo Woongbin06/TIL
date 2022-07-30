@@ -118,3 +118,88 @@ class MemoryMemberRespositoryTest() {
 }
 ```
 테스트 케이스 코드인데 여기서 눈여겨 볼점은 assertThat과 isEqualTo를 이용하여 값을 비교해서 테스트가 성공하는지 확인한다.
+
+## 회원 서비스
+회원 리포지토리와 도메인을 이용하여 실제 비지니스 로직을 구성하는 것
+
+### 서비스 코드
+``` java
+public class MemberService {
+  private final MemberRepository memberRepository;
+
+  public MemberService(MemberRepository memberRepository) {
+    this.memberRepository = memberRepository; // 외부에서 생성하도록 해주는 것.
+  }
+
+  // 회원 가입
+  public Long join(Member member) {
+    // 같은 이름이 있는 중복 회원 X
+    memberRepository.findByName(member.getName())
+        .ifPresent(m -> { // 이미 회원이 있으면 실행
+          throw new IllegalSttateException("이미 존재하는 회원입니다.");
+        });
+
+    memberRepository.svae(member);
+    return member.getId();
+  }
+
+  // 전체 회원 조회
+  public List<Member> findMembers() {
+    return memberRepository.findAll();
+  }
+
+  // 아이디로 조회
+  public Optional<Member> findOne(Long memberId) {
+    return memberRepository.findById(memberId);
+  }
+} 
+```
+회원 서비스를 구현하고 테스트하기 위해 테스트 케이스를 작성한다.
+
+## 회원 서비스 테스트 케이스
+``` java
+class MemberServiceTest {
+
+  MemberService memberService;
+  MemoryMemberRepository memberRepository;
+
+  @BeforeEach
+  public void beforeEach() {
+      memberRepository = new MemoryMemberrepository();
+      memberService = new memberService(memberRepository);
+  }
+
+  @AfterEach // 끝날 때마다 초기화
+  public void afterEach() {
+    memberRepository.clearStore();
+  }
+
+  @Test
+  void 회원가입() { // 테스트는 한국어로 적어도 됨.
+    // given
+    Member member = new Member();
+    member.setName("hello");
+    // when
+    Long saveId = memberService.join(member);
+    // then
+    Member findMember = memberService.findOne(saveId).get();
+    // 저장한 회원의 이름과 찾으려는 멤버의 이름이 같으면 테스트 성공
+    assertThat(member.getName()).isEqualTo(findMember.getName()); 
+  }
+
+  @Test
+  public void 중복_회원_예외() {
+    // given
+    Member member1 = new Member();
+    member1.setName("spring");
+    Member member2 = new Member();
+    member2.setName("spring");
+
+    // when
+    memberService.join(member1);
+    IllegalStateException e = assertThrows(IllegalStateException.class, () -> memberService.join(member2)); // 예외 발생한 것을 저장
+
+    assertthat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다."); // 예외가 발생하면 테스트 성공.
+  }
+}
+```
