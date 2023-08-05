@@ -138,3 +138,23 @@ If-xxx 라는 식의 리퀘스트 헤더 필드는 조건부 리퀘스트이다.
 - 조건부 리퀘스트를 받은 서버는 지정된 조건에 맞는 경우에만 리퀘스트를 받는다.
 
 If-Match 헤더 필드는 서버 상의 리소스를 특정하기 위해서 엔티티 태그 값을 전달한다.
+
+### If-Modified-Since
+
+If-Modified-Since 헤더 필드는 지정된 날짜 이후에 갱신된 리소스라면 리퀘스트를 받아들인다.
+
+### If-None-Match
+
+If-None-Match 헤더 필드는 If-Match 헤더 필드와 정반대로 동작한다.
+
+### If-Range
+
+If-Range 헤더 필드는 필드 값이 ETag 값 혹은 갱신 날짜가 일치하면 리퀘스트로 처리하고 아니면 리소스 전체를 반환한다.
+
+### If-Unmodified-Since
+
+If-Unmodified-Since 헤더 필드는 If-Modified-Since 헤더 필드와 정반대로 동작한다.
+
+### Max-Forwards
+
+Max-Forwards 헤더 필드는 TRACE 혹은 OPTIONS 메소드에 의한 리퀘스트를 할 때에 전송해도 좋은 서버 수의 최대치를 지정한다. 하나의 서버를 거칠 때마다 1씩 뺀다.
