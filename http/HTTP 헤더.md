@@ -158,3 +158,23 @@ If-Unmodified-Since 헤더 필드는 If-Modified-Since 헤더 필드와 정반�
 ### Max-Forwards
 
 Max-Forwards 헤더 필드는 TRACE 혹은 OPTIONS 메소드에 의한 리퀘스트를 할 때에 전송해도 좋은 서버 수의 최대치를 지정한다. 하나의 서버를 거칠 때마다 1씩 뺀다.
+
+### Proxy-Authorization
+
+Proxy-Authorization 헤더 필드는 프록시 서버에서의 인증 요구를 받아들인 때에 인증에 필요한 정보를 전단한다.
+
+### Range
+
+Range 헤더 필드는 리소스의 일부분만 취득하는 리퀘스트를 할 때 지정 범위를 전달한다.
+
+### Referer
+
+Referer 헤더 필드는 리퀘스트가 발생한 본래 리소스 URI를 전달한다.
+
+### TE
+
+TE 헤더 필드는 리스폰스로 받을 수 있는 전송 코딩의 형식과 상대적인 우선순위를 전달한다.
+
+### User-Agent
+
+User-Agent 헤더 필드는 리퀘스트를 생선한 브라우저와 유저 에이전트의 이름 등을 전달한다.
